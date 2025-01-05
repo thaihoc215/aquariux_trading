@@ -34,8 +34,6 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
     public void aggregatePrices() {
         Map<String, BigDecimal> binancePrices = fetchPricesFromBinance();
         Map<String, BigDecimal> huobiPrices = fetchPricesFromHuobi();
-
-        // Assuming we are interested in ETHUSDT and BTCUSDT pairs
         String[] pairs = {"ETHUSDT", "BTCUSDT"};
 
         for (String pair : pairs) {
@@ -47,12 +45,14 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
             BigDecimal bestBid = binanceBid.max(huobiBid);
             BigDecimal bestAsk = binanceAsk.min(huobiAsk);
 
-            Price price = new Price();
+            Price price = priceRepository.findTopByCurrencyPairOrderByCreatedAtDesc(pair)
+                    .orElse(new Price());
+
             price.setCurrencyPair(pair);
             price.setBidPrice(bestBid);
             price.setAskPrice(bestAsk);
-            price.setSource("Aggregated");
-            price.setCreatedAt(LocalDateTime.now());
+            price.setCreatedAt(price.getCreatedAt() == null ? LocalDateTime.now() : price.getCreatedAt());
+            price.setUpdatedAt(LocalDateTime.now());
 
             priceRepository.save(price);
         }
@@ -93,11 +93,8 @@ public class PriceAggregationServiceImpl implements PriceAggregationService {
 
     @Override
     public PriceDTO getLatestBestAggregatedPrice(String currencyPair) {
-        Price price = priceRepository.findTopByCurrencyPairOrderByCreatedAtDesc(currencyPair);
-        if (price == null) {
-            return null;
-        }
-
+        Price price = priceRepository.findTopByCurrencyPairOrderByCreatedAtDesc(currencyPair)
+                .orElseThrow(() -> new IllegalArgumentException("No latest price available for the currency pair: " + currencyPair));
         return objectMapper.convertValue(price, PriceDTO.class);
 
     }

@@ -2,6 +2,7 @@ package com.test.aquariux.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.aquariux.dto.UserWalletDto;
+import com.test.aquariux.dto.WalletDto;
 import com.test.aquariux.entity.CryptoHolding;
 import com.test.aquariux.entity.Wallet;
 import com.test.aquariux.repository.CryptoHoldingRepository;
@@ -29,10 +30,8 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public UserWalletDto getUserWallets(Long userId) {
-        Wallet wallet = walletRepository.findByUserId(userId);
-        if (wallet == null) {
-            return null;
-        }
+        Wallet wallet = walletRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
 
         List<CryptoHolding> holdings = cryptoHoldingRepository.findByWallet(wallet);
         List<Map<String, BigDecimal>> holdingsDto = holdings.stream()
@@ -43,5 +42,12 @@ public class WalletServiceImpl implements WalletService {
         userWalletDto.setHoldings(holdingsDto);
 
         return userWalletDto;
+    }
+
+    @Override
+    public WalletDto findByUserId(Long userId) {
+        Wallet wallet = walletRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
+        return objectMapper.convertValue(wallet, WalletDto.class);
     }
 }

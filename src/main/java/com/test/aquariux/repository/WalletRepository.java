@@ -4,7 +4,8 @@ import com.test.aquariux.entity.Wallet;
 import com.test.aquariux.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface WalletRepository extends JpaRepository<Wallet, Long> {
-    Wallet findByUserAndCurrency(User user, String currency);
-    Wallet findByUserId(Long userId);
+    Optional<Wallet> findByUserId(Long userId);
 }

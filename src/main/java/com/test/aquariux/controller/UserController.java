@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing user-related operations.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -16,6 +19,12 @@ public class UserController {
         this.walletService = walletService;
     }
 
+    /**
+     * Retrieves the wallets for a specific user.
+     *
+     * @param userId the ID of the user whose wallets are to be retrieved
+     * @return the user's wallets as a UserWalletDto
+     */
     @GetMapping("/{userId}/wallet")
     public UserWalletDto getUserWallets(@PathVariable Long userId) {
         return walletService.getUserWallets(userId);

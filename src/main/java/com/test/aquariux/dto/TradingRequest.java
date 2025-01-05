@@ -1,15 +1,27 @@
 package com.test.aquariux.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class TradingRequest implements Serializable {
+
+    @NotNull(message = "user id require")
     private Long userId;
+
+    @NotBlank(message = "Currency pair require")
     private String currencyPair;
+
+    @NotBlank(message = "Trade type require")
     private String tradeType;
+
+    @NotNull(message = "Amount cannot be null")
+    @Positive(message = "Amount must be positive")
     private BigDecimal amount;
 
-    // Getters and Setters
     public Long getUserId() {
         return userId;
     }

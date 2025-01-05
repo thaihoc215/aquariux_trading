@@ -49,14 +49,8 @@ public class TradeServiceImpl implements TradeService {
         BigDecimal amount = tradingRequest.getAmount();
 
         PriceDTO latestPrice = priceAggregationService.getLatestBestAggregatedPrice(currencyPair);
-        if (latestPrice == null) {
-            throw new IllegalArgumentException("No latest price available for the currency pair: " + currencyPair);
-        }
-
-        Wallet wallet = walletRepository.findByUserAndCurrency(user, "USDT");
-        if (wallet == null) {
-            throw new IllegalArgumentException("User does not have a USDT wallet");
-        }
+        Wallet wallet = walletRepository.findByUserId(tradingRequest.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User wallet not found"));
 
         BigDecimal price = tradeType.equalsIgnoreCase("BUY") ? latestPrice.getAskPrice() : latestPrice.getBidPrice();
         BigDecimal totalCost = price.multiply(amount);

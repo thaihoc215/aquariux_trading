@@ -30,12 +30,11 @@ CREATE TABLE trade (
 
 -- Create Prices Table
 CREATE TABLE price (
-                        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        currency_pair VARCHAR(10) NOT NULL,
-                        bid_price DECIMAL(20, 8) NOT NULL,
-                        ask_price DECIMAL(20, 8) NOT NULL,
-                        source VARCHAR(50) NOT NULL,
-                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                       currency_pair VARCHAR(10) NOT NULL PRIMARY KEY,
+                       bid_price DECIMAL(20, 8) NOT NULL,
+                       ask_price DECIMAL(20, 8) NOT NULL,
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Create Crypto Holdings Table

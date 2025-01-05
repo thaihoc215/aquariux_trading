@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller for managing price aggregation operations.
+ */
 @RestController
 @RequestMapping("/api/prices")
 public class PriceAggregationController {
@@ -17,11 +20,11 @@ public class PriceAggregationController {
         this.priceAggregationService = priceAggregationService;
     }
 
-//    @GetMapping("/aggregate")
-//    public void aggregatePrices() {
-//        priceAggregationService.aggregatePrices();
-//    }
-
+    /**
+     * Get the latest best aggregated price for a given currency pair.
+     * @param currencyPair The currency pair to get the price for.
+     * @return The latest best aggregated price for the given currency pair.
+     */
     @GetMapping("/latest")
     public PriceDTO getLatestBestAggregatedPrice(@RequestParam String currencyPair) {
         return priceAggregationService.getLatestBestAggregatedPrice(currencyPair);
