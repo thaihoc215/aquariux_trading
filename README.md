@@ -71,6 +71,9 @@ src\main\java\com\test\aquariux\service\impl\PriceAggregationServiceImpl.java#ag
 ```sh
 curl -X GET "http://localhost:8080/api/prices/latest?currencyPair=ETHUSDT"
 ```
+```sh
+curl -X GET "http://localhost:8080/api/prices/latest?currencyPair=BTCUSDT"
+```
 
 #### Task 3: Execute a Trade
 ```sh
@@ -83,11 +86,21 @@ curl -X POST "http://localhost:8080/api/trades" \
            "amount": 1.5
          }'
 ```
+```sh
+curl -X POST "http://localhost:8080/api/trades" \
+     -H "Content-Type: application/json" \
+     -d '{
+           "userId": 1,
+           "currencyPair": "BTCUSDT",
+           "tradeType": "SELL",
+           "amount": 0.001
+         }'
+```
 
 
 #### Task 4: Get User's Wallet Balance
 ```sh
-curl -X GET "http://localhost:8080/api/wallets?userId=1"
+curl -X GET "http://localhost:8080/api/users/1/wallet"
 ```
 
 #### Task 5: Get User's Trading History
